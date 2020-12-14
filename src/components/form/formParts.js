@@ -1,6 +1,6 @@
 import {DateInput, TextInput} from "./Input";
-import {FlightForm, FormButtonStyled} from "../../styles/formStyles";
-import {FlightLength, SelectInput} from "./FlightLength";
+import {BoldLabel, FormButtonStyled} from "../../styles/formStyles";
+import {SelectInput} from "./SelectInput";
 
 export const PersonNameControl = ({ personName, setPersonName }) => (
   <div className='formRow'>
@@ -45,6 +45,24 @@ export const CommentControl = ({ comment, setComment }) => (
 export const SubmitControl = ({label, onSubmit}) => (
   <div className='formRow'>
     <FormButtonStyled onClick={onSubmit}>{label}</FormButtonStyled>
+  </div>
+);
+
+
+export const LabelControl = ({label, value}) => (
+  <div className='formRow'>
+    <div className='formComment'>{label}</div>
+    <BoldLabel>{value}</BoldLabel>
+  </div>
+);
+
+
+export const CertificateIdControl = ({certificateId, setCertificateId}) => (
+  <div className='formRow'>
+    <div className='formComment'>Номер сертификата</div>
+    <div>
+      <TextInput value={certificateId} setValue={setCertificateId} />
+    </div>
   </div>
 );
 

@@ -34,3 +34,7 @@ export const FormButtonStyled = styled.button`
   ${ globalStyles.font }
   ${ formStyles.inputPadding }
 `;
+
+export const BoldLabel = styled.div`
+  fontWeight: bold;
+`;

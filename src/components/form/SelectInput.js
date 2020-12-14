@@ -9,7 +9,7 @@ export const SelectInput = ({ value, setValue }) => {
 
   return (
     <SelectStyled onChange={onChange} value={value}>
-      {options.map(el=>(<option value={el}>{el} мин</option>))}
+      {options.map(el=>(<option key={el} value={el}>{el} мин</option>))}
     </SelectStyled>
   )
 };

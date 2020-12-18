@@ -1,8 +1,11 @@
 import { apiService } from './apiService';
 
 const rawMethods = {
-  createCertificate: async (params) => await apiService.doGet('/tmp', params)
-  // createCertificate: async (params) => await apiService.doPost('/certificate/create', params)
+  getFlight:    async params => await apiService.doPost('/flights/get',  params),
+  editFlight:   async params => await apiService.doPost('/flights/edit', params),
+  listFlights:  async params => await apiService.doPost('/flights/list', params),
+
+  listPartners: async params => await apiService.doPost('/partners/list', params),
 };
 
 export const apiMethods = (dispatch) => {

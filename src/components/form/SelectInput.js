@@ -1,15 +1,12 @@
 import {SelectStyled} from "../../styles/formStyles";
 
-
-const options = [ 30, 60, 90, 120, 150, 180 ];
-
-export const SelectInput = ({ value, setValue }) => {
+export const SelectInput = ({ value, setValue, options }) => {
 
   const onChange = e => setValue(e.target.value);
 
   return (
     <SelectStyled onChange={onChange} value={value}>
-      {options.map(el=>(<option key={el} value={el}>{el} мин</option>))}
+      {options.map(el=>(<option key={el._id} value={el._id}>{el.name}</option>))}
     </SelectStyled>
   )
 };

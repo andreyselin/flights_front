@@ -1,3 +1,4 @@
+import React from "react";
 import {
     BrowserRouter as Router,
     Switch,
@@ -5,16 +6,24 @@ import {
     Route,
     Link
 } from "react-router-dom";
-import {CreateFlightRoute} from "./CreateFlightRoute";
+import {EditFlightRoute} from "./EditFlightRoute";
 import {ActivateFlightRoute} from "./ActivateFlightRoute";
 
 export const FlightsRoute = () => {
   const match = useRouteMatch();
   return (
     <Switch>
-      <Route path={`${match.path}/create`}>
-        <CreateFlightRoute />
+
+      <Route path={`${match.path}/edit/:flightId`}>
+        <EditFlightRoute />
       </Route>
+
+      <Route path={`${match.path}/list`}>
+        Flight list
+      </Route>
+
+      {/* Only for certificates */}
+
       <Route path={`${match.path}/activate`}>
         <ActivateFlightRoute />
       </Route>

@@ -1,6 +1,7 @@
-import {DateInput, TextInput} from "./Input";
+import {DateInput, InputCheckbox, TextInput} from "./Input";
 import {BoldLabel, FormButtonStyled} from "../../styles/formStyles";
 import {SelectInput} from "./SelectInput";
+import {flightOptions} from "../../const/flights";
 
 export const PersonNameControl = ({ personName, setPersonName }) => (
   <div className='formRow'>
@@ -22,14 +23,17 @@ export const FlightDateControl = ({ flightDate, setFlightDate }) => (
 );
 
 
-export const FlightLengthControl = ({ flightLength, setFlightLength }) => (
-  <div className='formRow'>
-    <div className='formComment'>Длительность</div>
-    <div>
-      <SelectInput value={flightLength} setValue={setFlightLength} />
+export const FlightLengthControl = ({ flight, updateFlightProperty }) => {
+  const setFlightLength = newValue => updateFlightProperty('time.flight', newValue);
+  return (
+    <div className='formRow'>
+      <div className='formComment'>Длительность</div>
+      <div>
+        <SelectInput value={flight.time.basic} setValue={setFlightLength} />
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
 
 export const CommentControl = ({ comment, setComment }) => (
@@ -66,6 +70,40 @@ export const CertificateIdControl = ({certificateId, setCertificateId}) => (
   </div>
 );
 
+export const PartnerControl = ({ flight, updateFlightProperty, options }) => {
 
+  const setValue = newValue => updateFlightProperty('partnerId', newValue);
 
+  return (
+    <div className='formRow'>
+      <div className='formComment'>Клиент от партнера</div>
+      <div>
+        <SelectInput value={flight.partnerId} setValue={setValue} options={options} />
+      </div>
+    </div>
+  );
+};
+
+export const FlightOptionsControl = ({ flight, updateFlightProperty }) => {
+
+  const toggleProperty = (optionsProperty) =>
+    updateFlightProperty(`options.${optionsProperty}`, !flight.options[optionsProperty]);
+
+  return (
+    <div className='formRow'>
+      <div className='formComment'>Клиент от партнера</div>
+      <div>
+        {Object.values(flightOptions).map(option => (
+          <div>
+            <InputCheckbox
+              value={flight.options[option.key]}
+              setValue={(newValue) => updateFlightProperty(`options.${option.key}`, newValue)}
+            />
+            { option.label }
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 

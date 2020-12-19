@@ -1,6 +1,6 @@
 import React, {useState, useContext, useEffect} from "react";
 import {useParams} from "react-router-dom";
-import {FlightForm} from "../../../styles/formStyles";
+import {FlightForm, HorizontalSeparator} from "../../../styles/formStyles";
 import { AppStateContextStore } from '../../../contexts/AppStateContext';
 import {
   CommentControl,
@@ -17,7 +17,7 @@ import {
   editModes,
   newEntityId,
   generateEditFlightUiState,
-  flightStates
+  flightStates, flightMinutePrice
 } from "../../../const/flights";
 import {updateNestedStateProperty} from "../../../utilities/updateNestedProperty";
 import {CertificateFlightSubForm} from "./CertificateFlightState";
@@ -37,6 +37,7 @@ const preSetFlightHook = (flight) => {
   flight.time.total     = flight.time.basic + flight.time.options;
 
   flight.price.options  = optionsPrice;
+  flight.price.basic    = flight.time.basic * flightMinutePrice;
   flight.price.total    = flight.price.basic + flight.price.options;
   flight.price.discount = flight.price.total / 100 * flight.price.discountPercent;
   flight.price.final    = flight.price.total - flight.price.discount;
@@ -118,6 +119,8 @@ export const EditFlightRoute = () => {
     <FlightForm>
 
       <CertificateFlightSubForm { ...{flight, updateFlightProperty, partnerOptions} } />
+
+      <HorizontalSeparator />
 
       { !uiState.saved && <SubmitControl label='Сохранить' onSubmit={onSubmit} /> }
       { uiState.saved && (

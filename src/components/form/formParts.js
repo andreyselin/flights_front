@@ -1,7 +1,7 @@
 import {DateInput, InputCheckbox, TextInput} from "./Input";
 import {BoldLabel, FormButtonStyled} from "../../styles/formStyles";
 import {SelectInput} from "./SelectInput";
-import {flightBasicTimeOptions, flightOptions} from "../../const/flights";
+import {flightBasicTimeOptions, flightDiscountOptions, flightOptions} from "../../const/flights";
 
 export const PersonNameControl = ({ flight, updateFlightProperty }) => {
   const setValue = newValue => updateFlightProperty('personName', newValue);
@@ -43,14 +43,46 @@ export const FlightLengthControl = ({ flight, updateFlightProperty }) => {
   );
 };
 
-export const CommentControl = ({ comment, setComment }) => (
-  <div className='formRow'>
-    <div className='formComment'>Комментарий</div>
-    <div>
-      <TextInput value={comment} setValue={setComment} />
+export const FlightDiscountControl = ({ flight, updateFlightProperty }) => {
+  const setValue = newValue => updateFlightProperty('price.discountPercent', parseInt(newValue));
+  return (
+    <div className='formRow'>
+      <div className='formComment'>Скидка</div>
+      <div>
+        <SelectInput
+          value={flight.price.discountPercent}
+          setValue={setValue}
+          options={flightDiscountOptions}
+          valueLabel={[ 'value', 'label' ]}
+        />
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+export const CommentControl = ({ flight, updateFlightProperty }) => {
+  const setValue = newValue => updateFlightProperty('comment', newValue);
+  return (
+    <div className='formRow'>
+      <div className='formComment'>Комментарий</div>
+      <div>
+        <TextInput value={flight.comment} setValue={setValue} />
+      </div>
+    </div>
+  );
+};
+
+export const PersonPhoneControl = ({ flight, updateFlightProperty }) => {
+  const setValue = newValue => updateFlightProperty('phone', newValue);
+  return (
+    <div className='formRow'>
+      <div className='formComment'>Телефон клиента</div>
+      <div>
+        <TextInput value={flight.phone} setValue={setValue} />
+      </div>
+    </div>
+  );
+}
 
 
 export const SubmitControl = ({label, onSubmit}) => (
@@ -83,7 +115,7 @@ export const PartnerControl = ({ flight, updateFlightProperty, partnerOptions })
 
   return (
     <div className='formRow'>
-      <div className='formComment'>Клиент от партнера</div>
+      <div className='formComment'>Партнер</div>
       <div>
         <SelectInput
           value={flight.partnerId}

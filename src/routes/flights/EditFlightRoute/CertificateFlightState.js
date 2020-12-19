@@ -4,9 +4,14 @@ import {
   FlightLengthControl,
   PartnerControl,
   LabelControl,
-  PersonNameControl, FlightOptionsControl
+  PersonNameControl,
+  FlightOptionsControl,
+  FlightDiscountControl,
+  PersonPhoneControl
 } from "../../../components/form/formParts";
 import React from "react";
+import {HorizontalSeparator} from "../../../styles/formStyles";
+import {PageHeader} from "../../../styles/pageStyles";
 
 //  Create internal certificate
 //  Edit flight as full
@@ -22,16 +27,31 @@ export const CertificateFlightSubForm = ({
 
   return (
     <>
-      <PartnerControl       { ...controlProps } partnerOptions={partnerOptions} />
-      <PersonNameControl    { ...controlProps } />
-      <FlightDateControl    { ...controlProps } />
-      <FlightLengthControl  { ...controlProps } />
-      <FlightOptionsControl { ...controlProps } />
-      {/*
-      <CommentControl       { ...controlProps } />
-      */}
-      <LabelControl label='Итоговая цена'  value={`${flight.price.final} тг.`} />
-      <LabelControl label='Итоговое время' value={`${flight.time.total} мин.`} />
+      <PageHeader>Создать сертификат</PageHeader>
+      <HorizontalSeparator />
+      <div className={'formSection'}>
+        <div className={'formBlock'}>
+          <PartnerControl       { ...controlProps } partnerOptions={partnerOptions} />
+          <PersonNameControl    { ...controlProps } />
+          <PersonPhoneControl   { ...controlProps } />
+          <FlightDateControl    { ...controlProps } />
+          <CommentControl       { ...controlProps } />
+        </div>
+        <div className='formBlock'>
+          <FlightLengthControl  { ...controlProps } />
+          <FlightOptionsControl { ...controlProps } />
+          <LabelControl label='Итоговое время' value={`${flight.time.total} мин.`} />
+        </div>
+      </div>
+      <HorizontalSeparator />
+      <div className={'formSection'}>
+        <div className={'formBlock'}>
+          <FlightDiscountControl  { ...controlProps } />
+        </div>
+        <div className={'formBlock'}>
+          <LabelControl label='Итоговая цена'  value={`${flight.price.final} тг.`} />
+        </div>
+      </div>
     </>
   );
 };

@@ -71,7 +71,9 @@ export const EditFlightRoute = () => {
       setPartnerOptions(partnerOptionsResult.data.partners);
 
       if (flightId === newEntityId) {
-        setFlight(generateFlight);
+        const newFlight = generateFlight({  });
+        preSetFlightHook(newFlight);
+        setFlight(newFlight);
       } else {
           const existingFlight = await api.getFlight(flightId);
           if (mExceptions.isAny(existingFlight)) {

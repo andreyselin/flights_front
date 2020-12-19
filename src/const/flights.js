@@ -10,7 +10,18 @@ export const newEntityId = 'newEntityId';
 // Time gap between flights (minutes)
 export const gapBwFlights = 30;
 
-export const flightBasicTimeOptions = [ 30, 60, 90, 120, 150, 180 ];
+export const flightBasicTimeOptions = [
+  { value: 30  , label: 30  },
+  { value: 60  , label: 60  },
+  { value: 90  , label: 90  },
+  { value: 120 , label: 120 },
+  { value: 150 , label: 150 },
+  { value: 180 , label: 180 }
+];
+
+// Later will depend on office
+export const flightMinutePrice = 100;
+export const defaultFlightLength = 60;
 
 export const flightOptions = {
   taxi: {
@@ -43,12 +54,12 @@ export const generateFlight = ({ state }) => ({
   certificateId: 0,
   state,
   time: {
-    basic:   60,
+    basic:   defaultFlightLength,
     options: 0,
     total:   0,
   },
   price: {
-    basic:    0,
+    basic:    defaultFlightLength * flightMinutePrice,
     options:  0,
     total:    0,
     discountPercent: 0, // percent to substract from price

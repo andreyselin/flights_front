@@ -23,17 +23,22 @@ export const DateInput = ({value, setValue}) => {
 };
 
 
-export const InputCheckbox = ({ value, setValue, isInValid, invalidComment }) => {
+export const InputCheckbox = ({ value, setValue, label, isInValid, invalidComment }) => {
   const toggle = event => setValue(!value);
   return (
     <div
       onClick={toggle}
-      style={{ width: '25px', height: '25px', border: '2px solid #41b3f4', borderRadius: '5px' }}
+      style={{display: 'flex', alignItems:'center'}}
     >
-      { value ?
-        <CheckIcon style={{ color: '#41b3f4' }} />
-        : null
-      }
+      <div
+        style={{ width: '25px', height: '25px', marginRight: '7px', border: '2px solid #151515', borderRadius: '5px' }}
+      >
+        { value ?
+          <CheckIcon style={{ color: '#151515' }} />
+          : null
+        }
+      </div>
+      { label }
     </div>
   );
 };

@@ -22,15 +22,16 @@ export const CertificateFlightSubForm = ({
 
   return (
     <>
-      <PartnerControl       { ...controlProps } options={partnerOptions} />
-      {/*
+      <PartnerControl       { ...controlProps } partnerOptions={partnerOptions} />
       <PersonNameControl    { ...controlProps } />
       <FlightDateControl    { ...controlProps } />
       <FlightLengthControl  { ...controlProps } />
       <FlightOptionsControl { ...controlProps } />
+      {/*
       <CommentControl       { ...controlProps } />
       */}
-      <LabelControl label='Итоговая цена' value={flight.price.total} />
+      <LabelControl label='Итоговая цена'  value={`${flight.price.final} тг.`} />
+      <LabelControl label='Итоговое время' value={`${flight.time.total} мин.`} />
     </>
   );
 };

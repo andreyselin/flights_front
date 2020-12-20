@@ -65,6 +65,8 @@ export const generateFlight = ({ state }) => ({
     discount: 0, // percent to substract from price
     final:    0, // With discount
   },
+  isPaid: false,
+  isExecuted: false,
   options: {
     coldAndDark: false,
     extreme:     false,

@@ -130,9 +130,6 @@ export const PartnerControl = ({ flight, updateFlightProperty, partnerOptions })
 
 export const FlightOptionsControl = ({ flight, updateFlightProperty }) => {
 
-  const toggleProperty = (optionsProperty) =>
-    updateFlightProperty(`options.${optionsProperty}`, !flight.options[optionsProperty]);
-
   return (
     <div className='formRow'>
       <div className='formComment'>Доп. опции</div>
@@ -147,6 +144,29 @@ export const FlightOptionsControl = ({ flight, updateFlightProperty }) => {
             {/*{ option.label }*/}
           </div>
         ))}
+      </div>
+    </div>
+  );
+};
+
+export const FlightStatusControl = ({ flight, updateFlightProperty }) => {
+
+  return (
+    <div className='formRow'>
+      <div className='formComment'>Статус полета</div>
+      <div style={{marginBottom: '5px'}}>
+        <InputCheckbox
+          value={flight.isPaid}
+          setValue={(newValue) => updateFlightProperty('isPaid', newValue)}
+          label='Оплачен'
+        />
+      </div>
+      <div style={{marginBottom: '5px'}}>
+        <InputCheckbox
+          value={flight.isExecuted}
+          setValue={(newValue) => updateFlightProperty('isExecuted', newValue)}
+          label='Выполнен'
+        />
       </div>
     </div>
   );

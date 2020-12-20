@@ -7,7 +7,7 @@ import {
   PersonNameControl,
   FlightOptionsControl,
   FlightDiscountControl,
-  PersonPhoneControl
+  PersonPhoneControl, FlightStatusControl
 } from "../../../components/form/formParts";
 import React from "react";
 import {HorizontalSeparator} from "../../../styles/formStyles";
@@ -47,9 +47,18 @@ export const CertificateFlightSubForm = ({
       <div className={'formSection'}>
         <div className={'formBlock'}>
           <FlightDiscountControl  { ...controlProps } />
+          <LabelControl label='Итоговая цена'  value={`${flight.price.final} тг.`} />
         </div>
         <div className={'formBlock'}>
-          <LabelControl label='Итоговая цена'  value={`${flight.price.final} тг.`} />
+          <FlightStatusControl  { ...controlProps } />
+        </div>
+      </div>
+      <HorizontalSeparator />
+      <div className={'formSection'}>
+        <div className={'formBlock'}>
+        </div>
+        <div className={'formBlock'}>
+          {/* */}
         </div>
       </div>
     </>

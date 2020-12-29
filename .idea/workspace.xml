@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db4119b9-d5e6-4ef0-9334-fca1e98e97d7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/App.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/FlightsRoute/ActivateFlightRoute/ActivateFlightRoute.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/FlightsRoute/FlightsRoute.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/HomeRoute/HomeRoute.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/GoodsRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/GoodsRoute/GoodsRoute.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/flights/ActivateFlightRoute.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/flights/EditFlightRoute/CertificateFlightState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/FlightsRoute/EditFlightRoute/CertificateFlightState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/flights/EditFlightRoute/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/FlightsRoute/EditFlightRoute/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/flights/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +52,7 @@
       <option name="presentableId" value="Default" />
       <updated>1609234265953</updated>
       <workItem from="1609234270421" duration="7719000" />
-      <workItem from="1609255646116" duration="315000" />
+      <workItem from="1609255646116" duration="1473000" />
     </task>
     <servers />
   </component>

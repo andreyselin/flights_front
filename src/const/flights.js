@@ -1,4 +1,4 @@
-import {prepareBasicSelectOptions} from "../utilities";
+import {prepareBasicSelectOptions, withLeadingNull} from "../utilities";
 
 export const flightStates = {
   certificate: 'certificate', // Non-activated, NO_DATE
@@ -48,7 +48,13 @@ export const editModes = {
   edit:   'edit'
 };
 
-export const generateFlight = ({ flightId, partnerId }) => ({
+const newTmpProps = (dateFrom) => {
+  const hours = withLeadingNull(dateFrom ? dateFrom.getHours() : 0);
+  const minutes = withLeadingNull(dateFrom ? dateFrom.getMinutes() : 0);
+  return { hours, minutes, datePickerDate: dateFrom }
+};
+
+const defaultFlight = ({ partnerId }) => ({
   partnerId, // as empty for select
   certificateId: 0,
   flightLength: {
@@ -71,20 +77,28 @@ export const generateFlight = ({ flightId, partnerId }) => ({
     extreme:     false,
     taxi:        false,
   },
-  dateFrom: new Date(),
-  dateTo: new Date(),
+  dateFrom: null,
+  dateTo:   null,
   client: {
-      name:  '',
-      phone: '',
+    name:  '',
+    phone: '',
   },
-  tmp: {
-    flightId,
-    hours: '00',
-    minutes: '00',
-    datePickerDate: new Date(),
-  },
+  // Todo: move to another object
   comment: '',
+
 });
+
+export const prepareFlight = ({ partnerId }, existingFlight) => {
+  const prepared = {
+  // export const prepareFlight = (existingFlight) => ({
+    ...defaultFlight({partnerId}),
+    ...existingFlight,
+  };
+  prepared.dateFrom = prepared.dateFrom ? new Date(Date.parse(prepared.dateFrom)) : new Date();
+  prepared.dateTo = prepared.dateTo ? new Date(Date.parse(prepared.dateTo)) : new Date();
+  prepared.tmp = newTmpProps(prepared.dateFrom);
+  return prepared;
+};
 
 export const generateEditFlightUiState = (customProperties) => ({
   saved:   false,

@@ -15,8 +15,9 @@ export const DataPickerControl = ({ formState, updateFunction, propertyPath, yea
   const [showDataPicker, setShowDataPicker] = useState(false);
   const [year, setYear] = useState(defaultValue.getFullYear());
   const [month, setMonth] = useState(defaultValue.getMonth());
+  const [date, setDate] = useState(defaultValue.getDate());
   const [calendar, setCalendar] = useState(getCalendarInfo({ month, year, weekDayNames, monthNames }));
-  const [value, setValue] = useState(formatDateToValue(calendar.today.date));
+  const [value, setValue] = useState(formatDateToValue(date));
 
   function onSelectDay(day) {
     setValue(formatDateToValue(day));

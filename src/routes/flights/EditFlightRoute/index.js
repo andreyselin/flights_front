@@ -12,7 +12,7 @@ import {
 import {mExceptions} from "../../../modules/Exceptions";
 // import {printContent} from "../../../utilities/printContent";
 import {
-  generateFlight, flightOptions, newEntityId,
+  prepareFlight, flightOptions, newEntityId,
   generateEditFlightUiState, flightMinutePrice
 } from "../../../const/flights";
 import {updateNestedStateProperty} from "../../../utilities/updateNestedProperty";
@@ -87,28 +87,38 @@ export const EditFlightRoute = () => {
       setPartnerOptions(thePartnerOptions);
 
       if (flightId === newEntityId) {
-        const newFlight = generateFlight({ flightId, partnerId: thePartnerOptions[0]._id });
+        const newFlight = prepareFlight(
+            { partnerId: thePartnerOptions[0]._id },
+            {});
         preSetFlightHook(newFlight);
         setFlight(newFlight);
       } else {
-          const existingFlightResult = await api.getFlight({_id: flightId});
-          if (mExceptions.isAny(existingFlightResult)) {
-            updateUiProperty('failed', existingFlightResult.key);
-            return;
-          }
-          console.log('existingFlight', existingFlightResult.data.flight);
-          setFlight(existingFlightResult.data.flight);
+        const existingFlightResult = await api.getFlight({_id: flightId});
+        if (mExceptions.isAny(existingFlightResult)) {
+          updateUiProperty('failed', existingFlightResult.key);
+          return;
+        }
+        const existingFlight = prepareFlight(
+          { partnerId: thePartnerOptions[0]._id },
+          existingFlightResult.data.flight);
+
+        console.log('===>', existingFlight);
+
+        preSetFlightHook(existingFlight);
+        setFlight(existingFlight);
       }
       updateUiProperty('loading', false);
     })();
-  }, []);
+  }, [ ]);
 
 
   const onSubmit = async () => {
     updateUiProperty('loading', true);
     const result = flightId === newEntityId
-        ? await api.createFlight({ flight })
-        : await api.editFlight({ flight });
+      ? await api.createFlight({ flight })
+      : await api.editFlight({ flight });
+
+    history.push(`/flights/edit/${result.data.flight._id}`);
     updateUiProperty('loading', false);
     if (mExceptions.isAny(result)) {
       updateUiProperty('failed', result.key);
@@ -117,10 +127,9 @@ export const EditFlightRoute = () => {
 
 
 
-    history.push(`/flights/edit/${result.data.flight._id}`);
 
 
-    setFlight(result.data.flight);
+    // setFlight(result.data.flight);
     updateUiProperty('saved', true);
   };
 

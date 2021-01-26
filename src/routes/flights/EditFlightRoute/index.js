@@ -4,23 +4,20 @@ import {FlightForm, HorizontalSeparator} from "../../../styles/formStyles";
 import { AppStateContextStore } from '../../../contexts/AppStateContext';
 import {
   CommentControl,
-  FlightDateControl,
-  FlightLengthControl, LabelControl,
-  PersonNameControl,
+  FlightDateControl, FlightDiscountControl,
+  FlightLengthControl, FlightOptionsControl, FlightStatusControl, LabelControl, PartnerControl,
+  PersonNameControl, PersonPhoneControl,
   SubmitControl
 } from "../../../components/form/formParts";
 import {mExceptions} from "../../../modules/Exceptions";
-import {printContent} from "../../../utilities/printContent";
+// import {printContent} from "../../../utilities/printContent";
 import {
-  generateFlight,
-  flightOptions,
-  editModes,
-  newEntityId,
-  generateEditFlightUiState,
-  flightStates, flightMinutePrice
+  generateFlight, flightOptions, newEntityId,
+  generateEditFlightUiState, flightMinutePrice
 } from "../../../const/flights";
 import {updateNestedStateProperty} from "../../../utilities/updateNestedProperty";
-import {CertificateFlightSubForm} from "./CertificateFlightState";
+import {PageHeader} from "../../../styles/pageStyles";
+import {withLeadingNull} from "../../../utilities";
 
 const preSetFlightHook = (flight) => {
   let optionsTime = 0;
@@ -28,16 +25,31 @@ const preSetFlightHook = (flight) => {
   Object.keys(flight.options)
     .forEach(optionKey => {
       if (flight.options[optionKey]) {
-        optionsTime  += flightOptions[optionKey].time;
+        optionsTime  += flightOptions[optionKey].flightLength;
         optionsPrice += flightOptions[optionKey].price;
       }
     });
 
-  flight.time.options   = optionsTime;
-  flight.time.total     = flight.time.basic + flight.time.options;
+  // Flight length
+  flight.flightLength.options   = optionsTime;
+  flight.flightLength.total     = flight.flightLength.basic + flight.flightLength.options;
 
+  // dateFrom
+  const dateFrom = new Date(flight.tmp.datePickerDate.getTime());
+  dateFrom.setHours(parseInt(flight.tmp.hours));
+  dateFrom.setMinutes(parseInt(flight.tmp.minutes));
+  console.log('== ==', dateFrom);
+
+  // dateTo
+  const dateTo = new Date(dateFrom.getTime());
+  dateTo.setMinutes(dateFrom.getMinutes() + flight.flightLength.total)
+
+  flight.dateFrom = dateFrom;
+  flight.dateTo = dateTo;
+
+  // Price
   flight.price.options  = optionsPrice;
-  flight.price.basic    = flight.time.basic * flightMinutePrice;
+  flight.price.basic    = flight.flightLength.basic * flightMinutePrice;
   flight.price.total    = flight.price.basic + flight.price.options;
   flight.price.discount = flight.price.total / 100 * flight.price.discountPercent;
   flight.price.final    = flight.price.total - flight.price.discount;
@@ -69,10 +81,11 @@ export const EditFlightRoute = () => {
         updateUiProperty('failed', partnerOptionsResult.key);
         return;
       }
-      setPartnerOptions(partnerOptionsResult.data.partners);
+      const thePartnerOptions = partnerOptionsResult.data.items;
+      setPartnerOptions(thePartnerOptions);
 
       if (flightId === newEntityId) {
-        const newFlight = generateFlight({  });
+        const newFlight = generateFlight({ partnerId: thePartnerOptions[0]._id });
         preSetFlightHook(newFlight);
         setFlight(newFlight);
       } else {
@@ -107,6 +120,9 @@ export const EditFlightRoute = () => {
   //   printContent(certificateId);
   // };
 
+  const controlProps = { flight, updateFlightProperty };
+
+
   if (uiState.loading) {
     return <div>Загрузка</div>;
   }
@@ -118,7 +134,50 @@ export const EditFlightRoute = () => {
   return (
     <FlightForm>
 
-      <CertificateFlightSubForm { ...{flight, updateFlightProperty, partnerOptions} } />
+
+      <>
+        <PageHeader>Создать сертификат</PageHeader>
+        <HorizontalSeparator />
+        <div className={'formSection'}>
+          <div className={'formBlock'}>
+            <PartnerControl       { ...controlProps } partnerOptions={partnerOptions} />
+            <PersonNameControl    { ...controlProps } />
+            <PersonPhoneControl   { ...controlProps } />
+            <CommentControl       { ...controlProps } />
+          </div>
+          <div className='formBlock'>
+            <FlightDateControl    { ...controlProps } />
+            <FlightLengthControl  { ...controlProps } />
+            <FlightOptionsControl { ...controlProps } />
+            <div style={{ display: 'flex' }}>
+              <div style={{ marginRight: '15px' }}>
+                <LabelControl label='Итоговое время' value={`${flight.flightLength.total} мин.`} />
+              </div>
+
+              <LabelControl label='Заканчивается в'
+                          value={`${withLeadingNull(flight.dateTo.getHours())}:${withLeadingNull(flight.dateTo.getMinutes())}`} />
+            </div>
+          </div>
+        </div>
+        <HorizontalSeparator />
+        <div className={'formSection'}>
+          <div className={'formBlock'}>
+            <FlightDiscountControl  { ...controlProps } />
+            <LabelControl label='Итоговая цена'  value={`${flight.price.final} тг.`} />
+          </div>
+          <div className={'formBlock'}>
+            <FlightStatusControl  { ...controlProps } />
+          </div>
+        </div>
+        <HorizontalSeparator />
+        <div className={'formSection'}>
+          <div className={'formBlock'}>
+          </div>
+          <div className={'formBlock'}>
+            {/* */}
+          </div>
+        </div>
+      </>
 
       <HorizontalSeparator />
 
@@ -129,6 +188,7 @@ export const EditFlightRoute = () => {
           <SubmitControl label='Печатать' onSubmit={()=>{}} />
         </>
       ) }
+      <SubmitControl label='TMP:show object' onSubmit={()=>console.log('flight', flight)} />
 
     </FlightForm>
   );

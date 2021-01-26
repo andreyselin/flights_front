@@ -40,7 +40,7 @@ export const CertificateFlightSubForm = ({
         <div className='formBlock'>
           <FlightLengthControl  { ...controlProps } />
           <FlightOptionsControl { ...controlProps } />
-          <LabelControl label='Итоговое время' value={`${flight.time.total} мин.`} />
+          <LabelControl label='Итоговое время' value={`${flight.flightLength.total} мин.`} />
         </div>
       </div>
       <HorizontalSeparator />

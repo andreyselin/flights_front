@@ -26,19 +26,19 @@ export const flightOptions = {
   taxi: {
     key: 'taxi',
     label: 'Taxi',
-    time: 0,
+    flightLength: 0,
     price: 5000
   },
   extreme: {
     key: 'extreme',
     label: 'Extreme',
-    time: 0,
+    flightLength: 0,
     price: 5000
   },
   coldAndDark: {
     key: 'coldAndDark',
     label: 'Cold & Dark',
-    time: 30,
+    flightLength: 30,
     price: 15000
   },
 };
@@ -48,11 +48,10 @@ export const editModes = {
   edit:   'edit'
 };
 
-export const generateFlight = ({ state }) => ({
-  partnerId:     0,
+export const generateFlight = ({ partnerId }) => ({
+  partnerId, // as empty for select
   certificateId: 0,
-  state,
-  time: {
+  flightLength: {
     basic:   defaultFlightLength,
     options: 0,
     total:   0,
@@ -72,10 +71,18 @@ export const generateFlight = ({ state }) => ({
     extreme:     false,
     taxi:        false,
   },
-  personName:    '',
-  flightDate:    '',
-  phone:         '',
-  comment:       '',
+  dateFrom: new Date(),
+  dateTo: new Date(),
+  client: {
+      name:  '',
+      phone: '',
+  },
+  tmp: {
+    hours: '00',
+    minutes: '00',
+    datePickerDate: new Date(),
+  },
+  comment: '',
 });
 
 export const generateEditFlightUiState = (customProperties) => ({

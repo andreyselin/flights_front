@@ -2,38 +2,59 @@ import {DateInput, InputCheckbox, TextInput} from "./Input";
 import {BoldLabel, FormButtonStyled} from "../../styles/formStyles";
 import {SelectInput} from "./SelectInput";
 import {flightBasicTimeOptions, flightDiscountOptions, flightOptions} from "../../const/flights";
+import {DataPickerControl} from "../formControls/DataPickerControl";
+import {hourOptions, minuteOptions} from "../../const";
 
 export const PersonNameControl = ({ flight, updateFlightProperty }) => {
-  const setValue = newValue => updateFlightProperty('personName', newValue);
+  const setValue = newValue => updateFlightProperty('client.name', newValue);
   return (<div className='formRow'>
       <div className='formComment'>Имя клиента</div>
       <div>
-        <TextInput value={flight.personName} setValue={setValue} />
+        <TextInput value={flight.client.name} setValue={setValue} />
       </div>
     </div>
   )
 };
 
+// export const FlightDateControl = ({ flight, updateFlightProperty }) => {
+//   const setValue = newValue => updateFlightProperty('dateFrom', newValue);
+//   return (
+//     <div className='formRow'>
+//       <div className='formComment'>Дата полета</div>
+//       <div>
+//         <DateInput value={flight.dateFrom} setValue={setValue} />
+//       </div>
+//     </div>
+//   );
+// }
+
 export const FlightDateControl = ({ flight, updateFlightProperty }) => {
-  const setValue = newValue => updateFlightProperty('flightDate', newValue);
+  const setHoursValue = newValue => updateFlightProperty('tmp.hours', newValue);
+  const setMinutesValue = newValue => updateFlightProperty('tmp.minutes', newValue);
   return (
-    <div className='formRow'>
-      <div className='formComment'>Дата полета</div>
-      <div>
-        <DateInput value={flight.flightDate} setValue={setValue} />
-      </div>
-    </div>
+      <div className='formRow'>
+       <div className='formComment'>Дата полета</div>
+       <div style={{width: '210px'}}>
+          <DataPickerControl formState={flight} updateFunction={updateFlightProperty} propertyPath={'tmp.datePickerDate'} />
+       </div>
+        <div style={{ marginTop: '15px' }} className='formComment'>Время полета</div>
+       <div style={{ width: '210px' }}>
+           <SelectInput valueLabel={[ 'key', 'value' ]} value={flight.tmp.hours} options={hourOptions} setValue={setHoursValue} /> ч.,&nbsp;
+           <SelectInput valueLabel={[ 'key', 'value' ]} value={flight.tmp.minutes} options={minuteOptions} setValue={setMinutesValue} /> мин.
+       </div>
+     </div>
+
   );
 }
 
 export const FlightLengthControl = ({ flight, updateFlightProperty }) => {
-  const setValue = newValue => updateFlightProperty('time.basic', parseInt(newValue));
+  const setValue = newValue => updateFlightProperty('flightLength.basic', parseInt(newValue));
   return (
     <div className='formRow'>
       <div className='formComment'>Продолжительность полета</div>
       <div>
         <SelectInput
-          value={flight.time.basic}
+          value={flight.flightLength.basic}
           setValue={setValue}
           options={flightBasicTimeOptions}
           valueLabel={[ 'value', 'label' ]}
@@ -73,12 +94,12 @@ export const CommentControl = ({ flight, updateFlightProperty }) => {
 };
 
 export const PersonPhoneControl = ({ flight, updateFlightProperty }) => {
-  const setValue = newValue => updateFlightProperty('phone', newValue);
+  const setValue = newValue => updateFlightProperty('client.phone', newValue);
   return (
     <div className='formRow'>
       <div className='formComment'>Телефон клиента</div>
       <div>
-        <TextInput value={flight.phone} setValue={setValue} />
+        <TextInput value={flight.client.phone} setValue={setValue} />
       </div>
     </div>
   );
@@ -121,7 +142,7 @@ export const PartnerControl = ({ flight, updateFlightProperty, partnerOptions })
           value={flight.partnerId}
           setValue={setValue}
           options={partnerOptions}
-          valueLabel={['_id', 'name']}
+          valueLabel={['_id', 'title']}
         />
       </div>
     </div>
@@ -133,9 +154,9 @@ export const FlightOptionsControl = ({ flight, updateFlightProperty }) => {
   return (
     <div className='formRow'>
       <div className='formComment'>Доп. опции</div>
-      <div>
+      <div style={{ display: 'flex' }}>
         {Object.values(flightOptions).map(option => (
-          <div key={option.key} style={{marginBottom: '5px'}}>
+          <div key={option.key} style={{marginRight: '15px'}}>
             <InputCheckbox
               value={flight.options[option.key]}
               setValue={(newValue) => updateFlightProperty(`options.${option.key}`, newValue)}

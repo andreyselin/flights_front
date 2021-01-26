@@ -48,7 +48,7 @@ export const editModes = {
   edit:   'edit'
 };
 
-export const generateFlight = ({ partnerId }) => ({
+export const generateFlight = ({ flightId, partnerId }) => ({
   partnerId, // as empty for select
   certificateId: 0,
   flightLength: {
@@ -78,6 +78,7 @@ export const generateFlight = ({ partnerId }) => ({
       phone: '',
   },
   tmp: {
+    flightId,
     hours: '00',
     minutes: '00',
     datePickerDate: new Date(),

@@ -1,9 +1,10 @@
 import { apiService } from './apiService';
 
 const rawMethods = {
-  getFlight:    async params => await apiService.doPost('/flights/get',  params),
-  editFlight:   async params => await apiService.doPost('/flights/edit', params),
-  listFlights:  async params => await apiService.doPost('/flights/list', params),
+  getFlight:    async params => await apiService.doPost('/flights/get',    params),
+  createFlight: async params => await apiService.doPost('/flights/create', params),
+  editFlight:   async params => await apiService.doPost('/flights/edit',   params),
+  listFlights:  async params => await apiService.doPost('/flights/list',   params),
 
   listPartners: async params => await apiService.doPost('/partners/list', params),
 };

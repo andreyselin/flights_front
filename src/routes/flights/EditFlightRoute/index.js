@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useHistory } from "react-router-dom";
 import {FlightForm, HorizontalSeparator} from "../../../styles/formStyles";
 import { AppStateContextStore } from '../../../contexts/AppStateContext';
 import {
@@ -59,6 +59,8 @@ const preSetFlightHook = (flight) => {
 
 export const EditFlightRoute = () => {
 
+  const history = useHistory();
+
   // Get certificate id = newEntityId / existing
   const { flightId } = useParams();
   const [ uiState, setUiState ] = useState(generateEditFlightUiState({ editMode: null }));
@@ -85,16 +87,17 @@ export const EditFlightRoute = () => {
       setPartnerOptions(thePartnerOptions);
 
       if (flightId === newEntityId) {
-        const newFlight = generateFlight({ partnerId: thePartnerOptions[0]._id });
+        const newFlight = generateFlight({ flightId, partnerId: thePartnerOptions[0]._id });
         preSetFlightHook(newFlight);
         setFlight(newFlight);
       } else {
-          const existingFlight = await api.getFlight(flightId);
-          if (mExceptions.isAny(existingFlight)) {
-            updateUiProperty('failed', existingFlight.key);
+          const existingFlightResult = await api.getFlight({_id: flightId});
+          if (mExceptions.isAny(existingFlightResult)) {
+            updateUiProperty('failed', existingFlightResult.key);
             return;
           }
-          setFlight(existingFlight.data);
+          console.log('existingFlight', existingFlightResult.data.flight);
+          setFlight(existingFlightResult.data.flight);
       }
       updateUiProperty('loading', false);
     })();
@@ -103,16 +106,22 @@ export const EditFlightRoute = () => {
 
   const onSubmit = async () => {
     updateUiProperty('loading', true);
-    const result = await api.editFlight(flight);
-    console.log('=>', result);
+    const result = flightId === newEntityId
+        ? await api.createFlight({ flight })
+        : await api.editFlight({ flight });
     updateUiProperty('loading', false);
     if (mExceptions.isAny(result)) {
       updateUiProperty('failed', result.key);
       return;
     }
-    setFlight(result.data);
+
+
+
+    history.push(`/flights/edit/${result.data.flight._id}`);
+
+
+    setFlight(result.data.flight);
     updateUiProperty('saved', true);
-    // print(result.data.certificateId);
   };
 
   // const print = (certificateId) => {
@@ -181,6 +190,7 @@ export const EditFlightRoute = () => {
 
       <HorizontalSeparator />
 
+{/*
       { !uiState.saved && <SubmitControl label='Сохранить' onSubmit={onSubmit} /> }
       { uiState.saved && (
         <>
@@ -189,7 +199,9 @@ export const EditFlightRoute = () => {
         </>
       ) }
       <SubmitControl label='TMP:show object' onSubmit={()=>console.log('flight', flight)} />
+*/}
 
+      <SubmitControl label='Сохранить' onSubmit={onSubmit} />
     </FlightForm>
   );
 };

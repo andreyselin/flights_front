@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import {EditFlightRoute} from "./EditFlightRoute";
 import {ActivateFlightRoute} from "./ActivateFlightRoute";
+import {ListFlightsRoute} from "./ListFlightsRoute";
 
 export const FlightsRoute = () => {
   const match = useRouteMatch();
@@ -19,7 +20,7 @@ export const FlightsRoute = () => {
       </Route>
 
       <Route path={`${match.path}/list`}>
-        Flight list
+        <ListFlightsRoute />
       </Route>
 
       {/* Only for certificates */}

@@ -111,6 +111,8 @@ export const EditFlightRoute = () => {
     })();
   }, [ ]);
 
+  const gotoList = () => history.push('/flights/list');
+  const gotoCreate = () => history.push(`/flights/edit/${newEntityId}`);
 
   const onSubmit = async () => {
     updateUiProperty('loading', true);
@@ -155,6 +157,12 @@ export const EditFlightRoute = () => {
 
       <>
         <PageHeader>Создать сертификат</PageHeader>
+        <HorizontalSeparator />
+        <div>
+          <button onClick={()=>gotoList()}>К списку</button>
+          &nbsp;
+          <button onClick={()=>gotoCreate()}>Создать</button>
+        </div>
         <HorizontalSeparator />
         <div className={'formSection'}>
           <div className={'formBlock'}>

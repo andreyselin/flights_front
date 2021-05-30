@@ -6,6 +6,8 @@ import {AppStateContextStore} from "../../../contexts/AppStateContext";
 import {FlightForm, HorizontalSeparator} from "../../../styles/formStyles";
 import {PageHeader} from "../../../styles/pageStyles";
 import {newEntityId} from "../../../const/flights";
+import {InlineButtonControl} from "../../../components/formControls/ButtonControl";
+import {ShortDateTime} from "../../../components/date/DrawDateTime";
 // import {api} from "../api";
 // import {Pagination} from "../components/Pagination";
 
@@ -46,6 +48,7 @@ export const ListFlightsRoute = () => {
             // pagination: preparePagination({ page })
         })
             .then(result => {
+              console.log('result?.data.items', result?.data.items)
                 if (result.status === 0) {
                     setItems(Object.keys(result?.data.items)
                         .map(key => result?.data?.items[key]));
@@ -70,7 +73,7 @@ export const ListFlightsRoute = () => {
         <PageHeader>Полеты</PageHeader>
         <HorizontalSeparator />
         <div>
-            <button onClick={()=>gotoEdit(newEntityId)}>Создать</button>
+            <InlineButtonControl onClick={()=>gotoEdit(newEntityId)} buttonLabel={'Создать'}></InlineButtonControl>
         </div>
         <HorizontalSeparator />
         { items &&
@@ -79,7 +82,7 @@ export const ListFlightsRoute = () => {
             <TrStyled>
                 <ThStyled style={{}}>Имя клиента</ThStyled>
                 <ThStyled style={{}}>Дата полета</ThStyled>
-                <ThStyled style={{}}>Редактировать</ThStyled>
+                <ThStyled style={{}}>...</ThStyled>
             </TrStyled>
             </thead>
             <tbody>
@@ -87,8 +90,8 @@ export const ListFlightsRoute = () => {
                 .map((flight, trIndex) =>(
                     <TrStyled key={trIndex}>
                         <TdStyled>{flight.client?.name}</TdStyled>
-                        <TdStyled>{flight.dateFrom}</TdStyled>
-                        <TdStyled><button onClick={()=>gotoEdit(flight._id)}>&rarr;</button></TdStyled>
+                        <TdStyled><ShortDateTime date={flight.dateFrom} /></TdStyled>
+                        <TdStyled><InlineButtonControl onClick={()=>gotoEdit(flight._id)} buttonLabel={'->'}></InlineButtonControl></TdStyled>
                     </TrStyled>
                 )) }
             </tbody>

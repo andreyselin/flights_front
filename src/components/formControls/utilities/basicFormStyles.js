@@ -71,3 +71,14 @@ export const basicButtonStyle = `
 export const BasicStyledButton = styled.button`
   ${ basicButtonStyle }
 `;
+
+export const InlineStyledButton = styled.button`
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-size: inherit;
+  background: ${ basicColors.green1 };
+  border: 2px solid #7fd37f;
+  ${basicDoublePadding}
+  ${basicBorderRadius}
+`;

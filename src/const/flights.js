@@ -48,10 +48,13 @@ export const editModes = {
   edit:   'edit'
 };
 
-const newTmpProps = (dateFrom) => {
-  const hours = withLeadingNull(dateFrom ? dateFrom.getHours() : 0);
-  const minutes = withLeadingNull(dateFrom ? dateFrom.getMinutes() : 0);
-  return { hours, minutes, datePickerDate: dateFrom }
+const newTmpProps = (from) => {
+  const hours = withLeadingNull(from ? from.getHours() : 0);
+  const minutes = withLeadingNull(from
+    ? Math.ceil(from.getMinutes() / 5) * 5
+    : 0
+  );
+  return { hours, minutes, datePickerDate: from }
 };
 
 const defaultFlight = ({ partnerId }) => ({
@@ -94,9 +97,9 @@ export const prepareFlight = ({ partnerId }, existingFlight) => {
     ...defaultFlight({partnerId}),
     ...existingFlight,
   };
-  prepared.dateFrom = prepared.dateFrom ? new Date(Date.parse(prepared.dateFrom)) : new Date();
-  prepared.dateTo = prepared.dateTo ? new Date(Date.parse(prepared.dateTo)) : new Date();
-  prepared.tmp = newTmpProps(prepared.dateFrom);
+  prepared.from = prepared.from ? new Date(Date.parse(prepared.from)) : new Date();
+  prepared.to = prepared.to ? new Date(Date.parse(prepared.to)) : new Date();
+  prepared.tmp = newTmpProps(prepared.from);
   return prepared;
 };
 

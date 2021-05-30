@@ -18,6 +18,7 @@ import {
 import {updateNestedStateProperty} from "../../../utilities/updateNestedProperty";
 import {PageHeader} from "../../../styles/pageStyles";
 import {withLeadingNull} from "../../../utilities";
+import {toast} from "react-toastify";
 
 const preSetFlightHook = (flight) => {
   let optionsTime = 0;
@@ -38,11 +39,10 @@ const preSetFlightHook = (flight) => {
   const dateFrom = new Date(flight.tmp.datePickerDate.getTime());
   dateFrom.setHours(parseInt(flight.tmp.hours));
   dateFrom.setMinutes(parseInt(flight.tmp.minutes));
-  console.log('== ==', dateFrom);
 
   // dateTo
   const dateTo = new Date(dateFrom.getTime());
-  dateTo.setMinutes(dateFrom.getMinutes() + flight.flightLength.total)
+  dateTo.setMinutes(dateFrom.getMinutes() + flight.flightLength.total);
 
   flight.dateFrom = dateFrom;
   flight.dateTo = dateTo;
@@ -123,9 +123,11 @@ export const EditFlightRoute = () => {
     history.push(`/flights/edit/${result.data.flight._id}`);
     updateUiProperty('loading', false);
     if (mExceptions.isAny(result)) {
+      toast.error("Ошибка. Информация не сохранена");
       updateUiProperty('failed', result.key);
       return;
     }
+    toast.success("Сохранение выполнено");
 
 
 

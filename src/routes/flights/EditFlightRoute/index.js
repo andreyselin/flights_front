@@ -61,16 +61,14 @@ export const EditFlightRoute = () => {
         }
         const existingFlight = prepareFlight(
           { partnerId: thePartnerOptions[0]._id },
-          existingFlightResult.data.flight);
-
-        console.log('===>', existingFlight);
-
+          existingFlightResult.data.flight
+        );
         preSetFlightHook(existingFlight);
         setFlight(existingFlight);
       }
       updateUiProperty('loading', false);
     })();
-  }, [ ]);
+  }, [ flightId ]);
 
   const gotoList = () => history.push('/flights/list');
   const gotoCreate = () => history.push(`/flights/edit/${newEntityId}`);
@@ -81,7 +79,7 @@ export const EditFlightRoute = () => {
       ? await api.createFlight({ flight })
       : await api.editFlight({ flight });
 
-    history.push(`/flights/edit/${result.data._id}`);
+    history.push(`/flights/edit/${result.data.flight._id}`);
     updateUiProperty('loading', false);
     if (mExceptions.isAny(result)) {
       toast.error("Ошибка. Информация не сохранена");
@@ -115,7 +113,11 @@ export const EditFlightRoute = () => {
 
 
       <>
-        <PageHeader>Создать сертификат</PageHeader>
+        <PageHeader>{
+          Boolean(flight._id)
+            ? (<>Cертификат <b>{flight._id}</b></>)
+            : (<>Создать сертификат</>)
+        }</PageHeader>
         <HorizontalSeparator />
         <div>
           <InlineButtonControl onClick={()=>gotoList()} buttonLabel={'К списку'}></InlineButtonControl>

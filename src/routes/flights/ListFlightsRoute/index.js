@@ -82,6 +82,8 @@ export const ListFlightsRoute = () => {
         <TableStyled style={{ marginBottom: '20px' }}>
             <thead>
             <TrStyled>
+                <ThStyled style={{}}>ID</ThStyled>
+                <ThStyled style={{}}>Сертификат</ThStyled>
                 <ThStyled style={{}}>Имя клиента</ThStyled>
                 <ThStyled style={{}}>Дата полета</ThStyled>
                 {/*<ThStyled style={{}}>...</ThStyled>*/}
@@ -94,7 +96,9 @@ export const ListFlightsRoute = () => {
                       onClick={()=>gotoEdit(flight._id)}
                       key={trIndex}
                     >
-                        <TdStyled>{flight.data?.client?.name}</TdStyled>
+                        <TdStyled>{flight._id}</TdStyled>
+                        <TdStyled>{flight.data.certificateId}</TdStyled>
+                        <TdStyled>{flight.data.client?.name}</TdStyled>
                         <TdStyled><ShortDateTime date={flight.from} /></TdStyled>
                         {/*<TdStyled><InlineButtonControl onClick={()=>gotoEdit(flight._id)} buttonLabel={'->'}></InlineButtonControl></TdStyled>*/}
                     </TrStyled>

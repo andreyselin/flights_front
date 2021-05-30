@@ -15,12 +15,24 @@ export const updateNestedStateProperty = (
     }
   }
   // Only 1 level nesting so far
-  else {
+  else if (props.length === 2){
     newState = {
       ...currentState,
       [ props[0] ] : {
         ...currentState[props[0]],
         [props[1]]: newValue
+      }
+    }
+  }
+  else {
+    newState = {
+      ...currentState,
+      [ props[0] ] : {
+        ...currentState[props[0]],
+        [props[1]]: {
+          ...currentState[props[0]][props[1]],
+          [props[2]]: newValue
+        }
       }
     }
   }

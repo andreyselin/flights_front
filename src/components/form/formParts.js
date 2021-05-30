@@ -6,11 +6,11 @@ import {DataPickerControl} from "../formControls/DataPickerControl";
 import {hourOptions, minuteOptions} from "../../const";
 
 export const PersonNameControl = ({ flight, updateFlightProperty }) => {
-  const setValue = newValue => updateFlightProperty('client.name', newValue);
+  const setValue = newValue => updateFlightProperty('data.client.name', newValue);
   return (<div className='formRow'>
       <div className='formComment'>Имя клиента</div>
       <div>
-        <TextInput value={flight.client.name} setValue={setValue} />
+        <TextInput value={flight.data.client.name} setValue={setValue} />
       </div>
     </div>
   )
@@ -48,13 +48,13 @@ export const FlightDateControl = ({ flight, updateFlightProperty }) => {
 }
 
 export const FlightLengthControl = ({ flight, updateFlightProperty }) => {
-  const setValue = newValue => updateFlightProperty('flightLength.basic', parseInt(newValue));
+  const setValue = newValue => updateFlightProperty('data.flightLength.basic', parseInt(newValue));
   return (
     <div className='formRow'>
       <div className='formComment'>Продолжительность полета</div>
       <div>
         <SelectInput
-          value={flight.flightLength.basic}
+          value={flight.data.flightLength.basic}
           setValue={setValue}
           options={flightBasicTimeOptions}
           valueLabel={[ 'value', 'label' ]}
@@ -65,13 +65,13 @@ export const FlightLengthControl = ({ flight, updateFlightProperty }) => {
 };
 
 export const FlightDiscountControl = ({ flight, updateFlightProperty }) => {
-  const setValue = newValue => updateFlightProperty('price.discountPercent', parseInt(newValue));
+  const setValue = newValue => updateFlightProperty('data.price.discountPercent', parseInt(newValue));
   return (
     <div className='formRow'>
       <div className='formComment'>Скидка</div>
       <div>
         <SelectInput
-          value={flight.price.discountPercent}
+          value={flight.data.price.discountPercent}
           setValue={setValue}
           options={flightDiscountOptions}
           valueLabel={[ 'value', 'label' ]}
@@ -94,16 +94,16 @@ export const CommentControl = ({ flight, updateFlightProperty }) => {
 };
 
 export const PersonPhoneControl = ({ flight, updateFlightProperty }) => {
-  const setValue = newValue => updateFlightProperty('client.phone', newValue);
+  const setValue = newValue => updateFlightProperty('data.client.phone', newValue);
   return (
     <div className='formRow'>
       <div className='formComment'>Телефон клиента</div>
       <div>
-        <TextInput value={flight.client.phone} setValue={setValue} />
+        <TextInput value={flight.data.client.phone} setValue={setValue} />
       </div>
     </div>
   );
-}
+};
 
 
 export const SubmitControl = ({label, onSubmit}) => (
@@ -132,7 +132,7 @@ export const CertificateIdControl = ({certificateId, setCertificateId}) => (
 
 export const PartnerControl = ({ flight, updateFlightProperty, partnerOptions }) => {
 
-  const setValue = newValue => updateFlightProperty('partnerId', newValue);
+  const setValue = newValue => updateFlightProperty('data.partnerId', newValue);
 
   return (
     <div className='formRow'>
@@ -162,7 +162,6 @@ export const FlightOptionsControl = ({ flight, updateFlightProperty }) => {
               setValue={(newValue) => updateFlightProperty(`options.${option.key}`, newValue)}
               label={option.label}
             />
-            {/*{ option.label }*/}
           </div>
         ))}
       </div>
@@ -177,15 +176,15 @@ export const FlightStatusControl = ({ flight, updateFlightProperty }) => {
       <div className='formComment'>Статус полета</div>
       <div style={{marginBottom: '5px'}}>
         <InputCheckbox
-          value={flight.isPaid}
-          setValue={(newValue) => updateFlightProperty('isPaid', newValue)}
+          value={flight.data.isPaid}
+          setValue={(newValue) => updateFlightProperty('data.isPaid', newValue)}
           label='Оплачен'
         />
       </div>
       <div style={{marginBottom: '5px'}}>
         <InputCheckbox
-          value={flight.isExecuted}
-          setValue={(newValue) => updateFlightProperty('isExecuted', newValue)}
+          value={flight.data.isExecuted}
+          setValue={(newValue) => updateFlightProperty('data.isExecuted', newValue)}
           label='Выполнен'
         />
       </div>

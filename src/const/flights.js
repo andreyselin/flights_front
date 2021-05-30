@@ -55,37 +55,37 @@ const newTmpProps = (dateFrom) => {
 };
 
 const defaultFlight = ({ partnerId }) => ({
-  partnerId, // as empty for select
-  certificateId: 0,
-  flightLength: {
-    basic:   defaultFlightLength,
-    options: 0,
-    total:   0,
+  data: {
+    client: {
+      name:  '',
+      phone: '',
+    },
+    partnerId, // as empty for select
+    certificateId: 0,
+    flightLength: {
+      basic:   defaultFlightLength,
+      options: 0,
+      total:   0,
+    },
+    price: {
+      basic:    defaultFlightLength * flightMinutePrice,
+      options:  0,
+      total:    0,
+      discountPercent: 0, // percent to substract from price
+      discount: 0, // percent to substract from price
+      final:    0, // With discount
+    },
+    isPaid: false,
+    isExecuted: false,
   },
-  price: {
-    basic:    defaultFlightLength * flightMinutePrice,
-    options:  0,
-    total:    0,
-    discountPercent: 0, // percent to substract from price
-    discount: 0, // percent to substract from price
-    final:    0, // With discount
-  },
-  isPaid: false,
-  isExecuted: false,
   options: {
     coldAndDark: false,
     extreme:     false,
     taxi:        false,
   },
-  dateFrom: null,
-  dateTo:   null,
-  client: {
-    name:  '',
-    phone: '',
-  },
-  // Todo: move to another object
+  from: null,
+  to:   null,
   comment: '',
-
 });
 
 export const prepareFlight = ({ partnerId }, existingFlight) => {

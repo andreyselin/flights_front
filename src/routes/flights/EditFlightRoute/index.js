@@ -3,59 +3,20 @@ import {useParams, useHistory } from "react-router-dom";
 import {FlightForm, HorizontalSeparator} from "../../../styles/formStyles";
 import { AppStateContextStore } from '../../../contexts/AppStateContext';
 import {
-  CommentControl,
-  FlightDateControl, FlightDiscountControl,
-  FlightLengthControl, FlightOptionsControl, FlightStatusControl, LabelControl, PartnerControl,
-  PersonNameControl, PersonPhoneControl,
-  SubmitControl
+  CommentControl,      FlightDateControl,    FlightDiscountControl,
+  FlightLengthControl, FlightOptionsControl, FlightStatusControl,
+  LabelControl,        PartnerControl,       PersonNameControl,
+  PersonPhoneControl,
 } from "../../../components/form/formParts";
 import {mExceptions} from "../../../modules/Exceptions";
 // import {printContent} from "../../../utilities/printContent";
-import {
-  prepareFlight, flightOptions, newEntityId,
-  generateEditFlightUiState, flightMinutePrice
-} from "../../../const/flights";
+import {prepareFlight, newEntityId, generateEditFlightUiState,} from "../../../const/flights";
 import {updateNestedStateProperty} from "../../../utilities/updateNestedProperty";
 import {PageHeader} from "../../../styles/pageStyles";
 import {withLeadingNull} from "../../../utilities";
 import {toast} from "react-toastify";
-
-const preSetFlightHook = (flight) => {
-  let optionsTime = 0;
-  let optionsPrice = 0;
-  Object.keys(flight.options)
-    .forEach(optionKey => {
-      if (flight.options[optionKey]) {
-        optionsTime  += flightOptions[optionKey].flightLength;
-        optionsPrice += flightOptions[optionKey].price;
-      }
-    });
-
-  // Flight length
-  flight.flightLength.options   = optionsTime;
-  flight.flightLength.total     = flight.flightLength.basic + flight.flightLength.options;
-
-  // dateFrom
-  const dateFrom = new Date(flight.tmp.datePickerDate.getTime());
-  dateFrom.setHours(parseInt(flight.tmp.hours));
-  dateFrom.setMinutes(parseInt(flight.tmp.minutes));
-
-  // dateTo
-  const dateTo = new Date(dateFrom.getTime());
-  dateTo.setMinutes(dateFrom.getMinutes() + flight.flightLength.total);
-
-  flight.dateFrom = dateFrom;
-  flight.dateTo = dateTo;
-
-  // Price
-  flight.price.options  = optionsPrice;
-  flight.price.basic    = flight.flightLength.basic * flightMinutePrice;
-  flight.price.total    = flight.price.basic + flight.price.options;
-  flight.price.discount = flight.price.total / 100 * flight.price.discountPercent;
-  flight.price.final    = flight.price.total - flight.price.discount;
-};
-
-
+import {InlineButtonControl} from "../../../components/formControls/ButtonControl";
+import {preSetFlightHook} from "./preSetFlightHook";
 
 export const EditFlightRoute = () => {
 
@@ -120,18 +81,14 @@ export const EditFlightRoute = () => {
       ? await api.createFlight({ flight })
       : await api.editFlight({ flight });
 
-    history.push(`/flights/edit/${result.data.flight._id}`);
+    history.push(`/flights/edit/${result.data._id}`);
     updateUiProperty('loading', false);
     if (mExceptions.isAny(result)) {
       toast.error("Ошибка. Информация не сохранена");
-      updateUiProperty('failed', result.key);
+      updateUiProperty('failed', JSON.stringify(result));
       return;
     }
     toast.success("Сохранение выполнено");
-
-
-
-
 
     // setFlight(result.data.flight);
     updateUiProperty('saved', true);
@@ -161,9 +118,9 @@ export const EditFlightRoute = () => {
         <PageHeader>Создать сертификат</PageHeader>
         <HorizontalSeparator />
         <div>
-          <button onClick={()=>gotoList()}>К списку</button>
+          <InlineButtonControl onClick={()=>gotoList()} buttonLabel={'К списку'}></InlineButtonControl>
           &nbsp;
-          <button onClick={()=>gotoCreate()}>Создать</button>
+          <InlineButtonControl onClick={()=>gotoCreate()} buttonLabel={'Создать'}></InlineButtonControl>
         </div>
         <HorizontalSeparator />
         <div className={'formSection'}>
@@ -179,11 +136,13 @@ export const EditFlightRoute = () => {
             <FlightOptionsControl { ...controlProps } />
             <div style={{ display: 'flex' }}>
               <div style={{ marginRight: '15px' }}>
-                <LabelControl label='Итоговое время' value={`${flight.flightLength.total} мин.`} />
+                <LabelControl label='Итоговое время' value={`${flight.data.flightLength.total} мин.`} />
               </div>
 
-              <LabelControl label='Заканчивается в'
-                          value={`${withLeadingNull(flight.dateTo.getHours())}:${withLeadingNull(flight.dateTo.getMinutes())}`} />
+              <LabelControl
+                label='Заканчивается в'
+                value={`${withLeadingNull(flight.to.getHours())}:${withLeadingNull(flight.to.getMinutes())}`}
+              />
             </div>
           </div>
         </div>
@@ -191,36 +150,37 @@ export const EditFlightRoute = () => {
         <div className={'formSection'}>
           <div className={'formBlock'}>
             <FlightDiscountControl  { ...controlProps } />
-            <LabelControl label='Итоговая цена'  value={`${flight.price.final} тг.`} />
+            <LabelControl label='Итоговая цена'  value={`${flight.data.price.final} тг.`} />
           </div>
           <div className={'formBlock'}>
             <FlightStatusControl  { ...controlProps } />
           </div>
         </div>
-        <HorizontalSeparator />
+{/*
         <div className={'formSection'}>
           <div className={'formBlock'}>
           </div>
           <div className={'formBlock'}>
-            {/* */}
           </div>
         </div>
-      </>
 
       <HorizontalSeparator />
 
-{/*
       { !uiState.saved && <SubmitControl label='Сохранить' onSubmit={onSubmit} /> }
       { uiState.saved && (
         <>
-          <LabelControl label='Идентификатор нового сертификата' value={flight.certificateId} />
+          <LabelControl label='Идентификатор нового сертификата' value={flight.data.certificateId} />
           <SubmitControl label='Печатать' onSubmit={()=>{}} />
         </>
       ) }
       <SubmitControl label='TMP:show object' onSubmit={()=>console.log('flight', flight)} />
 */}
+      </>
+      <HorizontalSeparator />
 
-      <SubmitControl label='Сохранить' onSubmit={onSubmit} />
+      <div>
+        <InlineButtonControl onClick={onSubmit} buttonLabel={'Сохранить'}></InlineButtonControl>
+      </div>
     </FlightForm>
   );
 };

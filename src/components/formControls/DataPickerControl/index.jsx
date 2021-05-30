@@ -1,27 +1,31 @@
 import React, {useState} from 'react';
 import {extractValue} from "../utilities";
-import {getCalendarInfo} from './getCalendarInfo';
+import {createCalendarGenerator, getEmptyCalendar} from './getCalendarInfo';
 import {
-  ContainerStyled,     WrapperStyled,        InputStyled,         DropDownStyled,
-  SelectStyled,        ListStyled,           ItemStyled,          OverItemStyled,
-  LabelStyled,         SelectsWrapperStyled, SelectWrapperStyled,
+  ContainerStyled, WrapperStyled, InputStyled, DropDownStyled, SelectStyled, ListStyled, LabelStyled,
+  SelectsWrapperStyled, SelectWrapperStyled
 } from './DataPickerControlStyled';
 import {monthNames, weekDayNames} from "../../../const";
 import {formatDateToString} from "../../../utilities";
 
-
-export const DataPickerControl = ({ formState, updateFunction, propertyPath, yearOptions }) => {
+export const DataPickerControl = ({ formState, updateFunction, propertyPath, validator, yearOptions, limitDateBefore, limitDateAfter }) => {
+  const getCalendarInfo = createCalendarGenerator({ weekDayNames, monthNames, limitDateBefore, limitDateAfter });
   const defaultValue = extractValue(formState, propertyPath);
   const [showDataPicker, setShowDataPicker] = useState(false);
   const [year, setYear] = useState(defaultValue.getFullYear());
   const [month, setMonth] = useState(defaultValue.getMonth());
-  const [date, setDate] = useState(defaultValue.getDate());
-  const [calendar, setCalendar] = useState(getCalendarInfo({ month, year, weekDayNames, monthNames }));
-  const [value, setValue] = useState(formatDateToValue(date));
+  const [calendar, setCalendar] = useState(getEmptyCalendar());
+  const [value, setValue] = useState(formatDateToValue(defaultValue.getDate()));
 
   function onSelectDay(day) {
-    setValue(formatDateToValue(day));
-    setShowDataPicker(false);
+    const selectedDate = formatDateToValue(day);
+
+    if (validator && !validator(selectedDate, formState)) {
+      return;
+    }
+
+    setValue(selectedDate);
+    changeShowDataPicker(false);
     updateFunction(propertyPath, new Date(year, month, day), formState);
   }
 
@@ -29,28 +33,34 @@ export const DataPickerControl = ({ formState, updateFunction, propertyPath, yea
     return formatDateToString (day, month+1, year, '.');
   }
 
-
   function updateYear(newYear) {
     const parsedYear = parseInt(newYear, 10);
     setYear(parsedYear);
-    setCalendar(getCalendarInfo({month, year: parsedYear, weekDayNames, monthNames}));
+    setCalendar(getCalendarInfo({ month, year: parsedYear }));
   }
 
   function updateMonth(newMonth) {
     const parsedMonth = parseInt(newMonth, 10);
     setMonth(parsedMonth);
-    setCalendar(getCalendarInfo({month: parsedMonth, year, weekDayNames, monthNames}));
+    setCalendar(getCalendarInfo({ month: parsedMonth, year }));
+  }
+
+  function changeShowDataPicker(status) {
+    if (status) {
+      setCalendar(getCalendarInfo({ month, year }));
+    }
+    setShowDataPicker(status);
   }
 
   return (
     <ContainerStyled>
-      <WrapperStyled show={showDataPicker} onClick={() => setShowDataPicker(false)}/>
+      <WrapperStyled show={showDataPicker} onClick={() => changeShowDataPicker(false)}/>
       <LabelStyled>
         <InputStyled
           readOnly={true}
           onChange={setValue}
           value={value}
-          onFocus={() => setShowDataPicker(true)}
+          onFocus={() => changeShowDataPicker(true)}
         />
       </LabelStyled>
       <DropDownStyled show={showDataPicker}>
@@ -69,12 +79,21 @@ export const DataPickerControl = ({ formState, updateFunction, propertyPath, yea
           </SelectWrapperStyled>
         </SelectsWrapperStyled>
         <ListStyled>
-          {calendar.weekDayNames.map((name) => <ItemStyled variant={'small'} key={name}>{name}</ItemStyled>)}
-          {calendar.preDays.map((pre, index) => <OverItemStyled key={'pre' + index}>{pre}</OverItemStyled>)}
-          {calendar.monthDays.map((day, index) => (
-            <ItemStyled key={'day' + index} onClick={() => onSelectDay(day)}>{day}</ItemStyled>
-          ))}
-          {calendar.postDays.map((post, index) => <OverItemStyled key={'post' + index}>{post}</OverItemStyled>)}
+          {calendar.weekDayNames.map((name) => <li className="item item--small" key={name}>{name}</li>)}
+          {calendar.preDays.map(({day}, index) => <li className={'item item--over'} key={'pre' + index}>{day}</li>)}
+          {calendar.monthDays.map(({day, isActive}, index) =>
+            <li
+              key={'day' + index}
+              {
+                ...(isActive ?
+                  { onClick: () => onSelectDay(day), className: 'item item--active' } :
+                  { className: 'item item--disabled' })
+              }
+            >{day}</li>
+          )}
+          {calendar.postDays.map(({day}, index) =>
+            <li className="item item--over" key={'post' + index}>{day}</li>
+          )}
         </ListStyled>
       </DropDownStyled>
     </ContainerStyled>

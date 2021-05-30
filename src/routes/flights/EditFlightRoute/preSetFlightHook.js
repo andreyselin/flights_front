@@ -15,14 +15,18 @@ export const preSetFlightHook = (flight) => {
     flight.data.flightLength.options   = optionsTime;
     flight.data.flightLength.total     = flight.data.flightLength.basic + flight.data.flightLength.options;
 
+    console.log('flight.tmp.datePickerDate:', flight.tmp.datePickerDate);
+
     // dateFrom
     const from = new Date(flight.tmp.datePickerDate.getTime());
     from.setHours(parseInt(flight.tmp.hours));
     from.setMinutes(parseInt(flight.tmp.minutes));
+    console.log('FROM:', from);
 
     // dateTo
     const to = new Date(from.getTime());
     to.setMinutes(from.getMinutes() + flight.data.flightLength.total);
+    console.log('to:', to);
 
     flight.from = from;
     flight.to = to;

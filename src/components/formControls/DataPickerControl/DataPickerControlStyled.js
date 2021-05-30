@@ -3,7 +3,6 @@ import {
   basicBorder,
   basicBorderRadius, basicDoublePadding,
   basicInputStyle, basicPadding,
-  BasicStyledInput,
   BasicStyledUl
 } from "../utilities/basicFormStyles";
 
@@ -26,8 +25,8 @@ export const LabelStyled = styled.label`
   ${basicBorder}
   ${basicBorderRadius}
 `;
-  // display: inline-block;
-  // width: 100%;
+// display: inline-block;
+// width: 100%;
 
 export const InputStyled = styled.input`
   ${ basicInputStyle }
@@ -51,23 +50,56 @@ export const SelectStyled = styled.select`
 export const ListStyled = styled(BasicStyledUl)`
   padding: 3px 0;
   flex-wrap: wrap;
-`;
 
-export const ItemStyled = styled.li`
-  width: 14.285%;
-  padding: 4px 0;
-  text-align: center;
-  cursor: pointer;
-  ${
-    props => props.variant === 'small'
-      ? 'font-size: 0.75em; color: lightgray;'
-      : ''
+  .item {
+    width: 14.285%;
+    padding: 4px 0;
+    text-align: center;
   }
-`;
-
-export const OverItemStyled = styled(ItemStyled)`
-  color: lightgray;
-  cursor: default;
+  
+  .item--active {
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color .5s;
+    
+    &:hover {
+      background-color: cornflowerblue;
+    }
+  }
+  
+  .item--small {
+    font-size: 0.75em;
+    color: lightgray;
+    cursor: default;
+  }
+  
+  .item--over {
+    color: lightgray;
+    cursor: default;
+  }
+  
+  .item--disabled {
+    position: relative;
+    cursor: default;
+    
+    &:before,
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      width: 50%;
+      height: 2px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+      background-color: indianred;
+      opacity: .6;
+    }
+    
+    &:after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+  }
 `;
 
 export const WrapperStyled = styled.div`
@@ -77,18 +109,17 @@ export const WrapperStyled = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  zIndex: 90;
+  z-index: 90;
 `;
 
 export const DropDownStyled = styled.div`
   display: ${ props => props.show ? 'block' : 'none' };
   position: absolute;
-  backgroundColor: white;
+  background-color: white;
   left: 0;
   bottom: 0;
   transform: translateY(101%);
-  zIndex: 100;
-  background: #fff;
+  z-index: 100;
   ${basicBorder}
   ${basicPadding}
   ${basicBorderRadius}

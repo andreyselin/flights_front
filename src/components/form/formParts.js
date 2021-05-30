@@ -16,18 +16,6 @@ export const PersonNameControl = ({ flight, updateFlightProperty }) => {
   )
 };
 
-// export const FlightDateControl = ({ flight, updateFlightProperty }) => {
-//   const setValue = newValue => updateFlightProperty('dateFrom', newValue);
-//   return (
-//     <div className='formRow'>
-//       <div className='formComment'>Дата полета</div>
-//       <div>
-//         <DateInput value={flight.dateFrom} setValue={setValue} />
-//       </div>
-//     </div>
-//   );
-// }
-
 export const FlightDateControl = ({ flight, updateFlightProperty }) => {
   const setHoursValue = newValue => updateFlightProperty('tmp.hours', newValue);
   const setMinutesValue = newValue => updateFlightProperty('tmp.minutes', newValue);
@@ -45,7 +33,7 @@ export const FlightDateControl = ({ flight, updateFlightProperty }) => {
      </div>
 
   );
-}
+};
 
 export const FlightLengthControl = ({ flight, updateFlightProperty }) => {
   const setValue = newValue => updateFlightProperty('data.flightLength.basic', parseInt(newValue));
@@ -121,25 +109,26 @@ export const LabelControl = ({label, value}) => (
 );
 
 
-export const CertificateIdControl = ({certificateId, setCertificateId}) => (
-  <div className='formRow'>
-    <div className='formComment'>Номер сертификата</div>
-    <div>
-      <TextInput value={certificateId} setValue={setCertificateId} />
+export const CertificateIdControl = ({ flight, updateFlightProperty}) => {
+  const setValue = newValue => updateFlightProperty('data.certificateId', newValue);
+  return (
+    <div className='formRow'>
+      <div className='formComment'>Номер сертификата</div>
+      <div>
+        <TextInput value={flight.data.certificateId} setValue={setValue} />
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
 export const PartnerControl = ({ flight, updateFlightProperty, partnerOptions }) => {
-
   const setValue = newValue => updateFlightProperty('data.partnerId', newValue);
-
   return (
     <div className='formRow'>
       <div className='formComment'>Партнер</div>
       <div>
         <SelectInput
-          value={flight.partnerId}
+          value={flight.data.partnerId}
           setValue={setValue}
           options={partnerOptions}
           valueLabel={['_id', 'title']}

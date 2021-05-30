@@ -64,7 +64,7 @@ const defaultFlight = ({ partnerId }) => ({
       phone: '',
     },
     partnerId, // as empty for select
-    certificateId: 0,
+    certificateId: '',
     flightLength: {
       basic:   defaultFlightLength,
       options: 0,

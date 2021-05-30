@@ -8,14 +8,16 @@ import {PageHeader} from "../../../styles/pageStyles";
 import {newEntityId} from "../../../const/flights";
 import {InlineButtonControl} from "../../../components/formControls/ButtonControl";
 import {ShortDateTime} from "../../../components/date/DrawDateTime";
-// import {api} from "../api";
-// import {Pagination} from "../components/Pagination";
 
 const TableStyled = styled.table`
     width: 100%;
 `;
 const TrStyled = styled.tr`
-    border-bottom: 1px solid lightgray;
+  cursor: pointer;
+  border-bottom: 1px solid lightgray;
+  &:hover {
+    background: rgba(0,0,0,0.05);
+  }
 `;
 const TdStyled = styled.td`
     padding: 3px 7px;
@@ -82,16 +84,19 @@ export const ListFlightsRoute = () => {
             <TrStyled>
                 <ThStyled style={{}}>Имя клиента</ThStyled>
                 <ThStyled style={{}}>Дата полета</ThStyled>
-                <ThStyled style={{}}>...</ThStyled>
+                {/*<ThStyled style={{}}>...</ThStyled>*/}
             </TrStyled>
             </thead>
             <tbody>
             { items
                 .map((flight, trIndex) =>(
-                    <TrStyled key={trIndex}>
-                        <TdStyled>{flight.client?.name}</TdStyled>
-                        <TdStyled><ShortDateTime date={flight.dateFrom} /></TdStyled>
-                        <TdStyled><InlineButtonControl onClick={()=>gotoEdit(flight._id)} buttonLabel={'->'}></InlineButtonControl></TdStyled>
+                    <TrStyled
+                      onClick={()=>gotoEdit(flight._id)}
+                      key={trIndex}
+                    >
+                        <TdStyled>{flight.data?.client?.name}</TdStyled>
+                        <TdStyled><ShortDateTime date={flight.from} /></TdStyled>
+                        {/*<TdStyled><InlineButtonControl onClick={()=>gotoEdit(flight._id)} buttonLabel={'->'}></InlineButtonControl></TdStyled>*/}
                     </TrStyled>
                 )) }
             </tbody>

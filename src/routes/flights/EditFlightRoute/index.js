@@ -3,9 +3,10 @@ import {useParams, useHistory } from "react-router-dom";
 import {FlightForm, HorizontalSeparator} from "../../../styles/formStyles";
 import { AppStateContextStore } from '../../../contexts/AppStateContext';
 import {
-  CommentControl,      FlightDateControl,    FlightDiscountControl,
+  CertificateIdControl,
+  CommentControl, FlightDateControl, FlightDiscountControl,
   FlightLengthControl, FlightOptionsControl, FlightStatusControl,
-  LabelControl,        PartnerControl,       PersonNameControl,
+  LabelControl, PartnerControl, PersonNameControl,
   PersonPhoneControl,
 } from "../../../components/form/formParts";
 import {mExceptions} from "../../../modules/Exceptions";
@@ -17,6 +18,7 @@ import {withLeadingNull} from "../../../utilities";
 import {toast} from "react-toastify";
 import {InlineButtonControl} from "../../../components/formControls/ButtonControl";
 import {preSetFlightHook} from "./preSetFlightHook";
+import {isExternalPartner} from "../../../utilities/isExternalPartner";
 
 export const EditFlightRoute = () => {
 
@@ -68,7 +70,7 @@ export const EditFlightRoute = () => {
       }
       updateUiProperty('loading', false);
     })();
-  }, [ flightId ]);
+  }, [flightId]);
 
   const gotoList = () => history.push('/flights/list');
   const gotoCreate = () => history.push(`/flights/edit/${newEntityId}`);
@@ -115,8 +117,8 @@ export const EditFlightRoute = () => {
       <>
         <PageHeader>{
           Boolean(flight._id)
-            ? (<>Cертификат <b>{flight._id}</b></>)
-            : (<>Создать сертификат</>)
+            ? (<>Редактировать полет: <b>{flight._id}</b></>)
+            : (<>Создать полет</>)
         }</PageHeader>
         <HorizontalSeparator />
         <div>
@@ -128,6 +130,7 @@ export const EditFlightRoute = () => {
         <div className={'formSection'}>
           <div className={'formBlock'}>
             <PartnerControl       { ...controlProps } partnerOptions={partnerOptions} />
+            {isExternalPartner(flight.data.partnerId) && (<CertificateIdControl { ...controlProps } />)}
             <PersonNameControl    { ...controlProps } />
             <PersonPhoneControl   { ...controlProps } />
             <CommentControl       { ...controlProps } />
